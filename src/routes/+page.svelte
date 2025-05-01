@@ -831,13 +831,9 @@
       
       // Get existing saved progress for all tests
       let allProgress = {};
-      const existingData = localStorage.getItem('apTestAllProgress');
-      if (existingData) {
-        try {
-          allProgress = JSON.parse(existingData);
-        } catch (e) {
-          console.error("Error parsing existing progress data:", e);
-        }
+      const savedData = localStorage.getItem('apTestAllProgress');
+      if (savedData) {
+        allProgress = JSON.parse(savedData);
       }
       
       // Save this test's progress in the collection
@@ -1065,7 +1061,7 @@
         // Get all saved progress
         const savedData = localStorage.getItem('apTestAllProgress');
         if (savedData) {
-          const allProgress = JSON.parse(savedData) as Record<string, any>;
+          const allProgress = JSON.parse(savedData);
           
           // For backwards compatibility with old format
           const oldData = localStorage.getItem('apTestProgress');
