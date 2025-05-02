@@ -98,7 +98,17 @@
    * @property {number} answeredQuestions - Number of answered questions
    * @property {number} correctAnswers - Number of correct answers
    * @property {number} accuracy - Accuracy percentage
-   * @property {Array<{questionNumber: number, questionId: any, questionText: any, userAnswer: string | null, userAnswerText: any, correctAnswer: any, correctAnswerText: any}>} missedQuestions - Array of missed questions
+   * @property {Array<{
+   *   questionNumber: number, 
+   *   questionId: any, 
+   *   questionText: any, 
+   *   userAnswer: string | null, 
+   *   userAnswerText: any, 
+   *   userAnswerHtml: any,
+   *   correctAnswer: any, 
+   *   correctAnswerText: any,
+   *   correctAnswerHtml: any
+   * }>} missedQuestions - Array of missed questions
    * @property {number} timeSpent - Time spent in seconds
    */
 
@@ -249,34 +259,45 @@
               input.remove();
             });
             
+            // Get the raw HTML option content
             const optionHtml = optionClone.innerHTML;
             const optionValue = radioInput?.getAttribute('value') || '';
             const textContent = currentElement.textContent?.trim() || '';
             
-            // Determine the correct letter ID (A, B, C, D)
+            // Determine the correct letter ID (A, B, C, D, E)
             let choiceId = optionValue; // Default to value attribute
             if (!choiceId || choiceId === '') {
               // Try to extract the letter from the text content
-              const textMatch = textContent.match(/^\s*([A-D])[.)\s]/);
+              const textMatch = textContent.match(/^\s*([A-E])[.)\s]/);
               if (textMatch) {
                 choiceId = textMatch[1];
               } else {
                 // Use index-based letter if all else fails
-                choiceId = String.fromCharCode(65 + options.length); // A, B, C, D...
+                choiceId = String.fromCharCode(65 + options.length); // A, B, C, D, E...
               }
             }
             
-            // Clean text content (remove the letter prefix)
+            // Clean text content (remove the letter prefix) but preserve special notations
             let cleanedText = textContent;
-            const letterMatch = cleanedText.match(/^\s*([A-D])[.)\s]+(.+)$/);
+            const letterMatch = cleanedText.match(/^\s*([A-E])[.)\s]+(.+)$/);
             if (letterMatch) {
               cleanedText = letterMatch[2].trim();
+            }
+            
+            // Clean the HTML content by removing the letter prefix
+            let cleanedHtml = optionHtml;
+            // First try to match and remove patterns like "A." or "A " or "A."
+            if (cleanedHtml.match(/^\s*[A-E][.)\s]+/)) {
+              cleanedHtml = cleanedHtml.replace(/^\s*[A-E][.)\s]+/, '').trim();
+            } else {
+              // Try to find and remove patterns where the letter is in a tag
+              cleanedHtml = cleanedHtml.replace(/^(\s*<[^>]+>)\s*[A-E][.)\s]+/, '$1').trim();
             }
             
             options.push({
               id: choiceId,
               text: cleanedText,
-              html: optionHtml
+              html: cleanedHtml
             });
             
             // Move to the next element
@@ -579,26 +600,28 @@
     const missedQuestions = [];
     for (let i = 0; i < allQuestions.length; i++) {
       if (userAnswers[i] !== null && userAnswers[i] !== allQuestions[i].correctAnswer) {
-        // Find the text for the answer the user chose
-        const userChoiceText = allQuestions[i].choices.find(
+        // Find the user's selected choice
+        const userChoice = allQuestions[i].choices.find(
           /** @param {any} choice */
           choice => choice.id === userAnswers[i]
-        )?.text || 'Unknown';
+        );
         
-        // Find the text for the correct answer
-        const correctChoiceText = allQuestions[i].choices.find(
+        // Find the correct choice
+        const correctChoice = allQuestions[i].choices.find(
           /** @param {any} choice */
           choice => choice.id === allQuestions[i].correctAnswer
-        )?.text || 'Unknown';
+        );
         
         missedQuestions.push({
           questionNumber: i + 1,
           questionId: allQuestions[i].id,
           questionText: allQuestions[i].text,
           userAnswer: userAnswers[i],
-          userAnswerText: userChoiceText,
+          userAnswerText: userChoice?.text || 'Unknown',
+          userAnswerHtml: userChoice?.html || userChoice?.text || 'Unknown',
           correctAnswer: allQuestions[i].correctAnswer,
-          correctAnswerText: correctChoiceText
+          correctAnswerText: correctChoice?.text || 'Unknown',
+          correctAnswerHtml: correctChoice?.html || correctChoice?.text || 'Unknown'
         });
       }
     }
@@ -730,11 +753,11 @@
                   <div class="answer-info">
                     <p>
                       <span class="answer-label">Your answer: </span>
-                      <span class="user-answer">{missed.userAnswer}. {missed.userAnswerText}</span>
+                      <span class="user-answer">{missed.userAnswer}. {@html missed.userAnswerHtml}</span>
                     </p>
                     <p>
                       <span class="answer-label">Correct answer: </span>
-                      <span class="correct-answer">{missed.correctAnswer}. {missed.correctAnswerText}</span>
+                      <span class="correct-answer">{missed.correctAnswer}. {@html missed.correctAnswerHtml}</span>
                     </p>
                   </div>
                 </div>
@@ -864,7 +887,7 @@
                           on:click={() => answerQuestion(choice.id)}
                         >
                           <span class="choice-letter">{choice.id}</span>
-                          <span class="choice-text">{choice.text}</span>
+                          <span class="choice-text">{@html choice.html}</span>
                         </div>
                       {/each}
                     </div>
@@ -901,7 +924,7 @@
                             on:click={() => answerQuestion(choice.id)}
                           >
                             <span class="choice-letter">{choice.id}</span>
-                            <span class="choice-text">{choice.text}</span>
+                            <span class="choice-text">{@html choice.html}</span>
                           </div>
                         {/each}
                       </div>
@@ -925,7 +948,7 @@
                         on:click={() => answerQuestion(choice.id)}
                       >
                         <span class="choice-letter">{choice.id}</span>
-                        <span class="choice-text">{choice.text}</span>
+                        <span class="choice-text">{@html choice.html}</span>
                       </div>
                     {/each}
                   </div>

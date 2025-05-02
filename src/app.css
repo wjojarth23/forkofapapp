@@ -544,13 +544,19 @@ button:disabled {
   min-width: 120px;
 }
 
-.user-answer {
+.user-answer, .correct-answer {
   color: var(--error);
   font-weight: bold;
   padding: 2px 6px;
   background: var(--error-light);
   border-radius: 4px;
   display: inline-block;
+}
+
+.user-answer img, .correct-answer img {
+  max-width: 100%;
+  display: block;
+  margin-top: 5px;
 }
 
 .correct-answer {
