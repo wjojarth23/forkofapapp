@@ -12,6 +12,18 @@
   ];
 </script>
 
+<svelte:head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+  </style>
+</svelte:head>
+
 <main>
   <div class="home-container">
     <div class="gradient-bg"></div>
@@ -58,7 +70,7 @@
   /* Main container for landing page */
   .home-container {
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
     background-color: var(--white);
     display: flex;
     justify-content: center;
@@ -72,31 +84,31 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 100%;
-    background: linear-gradient(135deg, rgba(53, 152, 219, 0.1) 0%, rgba(53, 152, 219, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(53, 152, 219, 0.2) 0%, rgba(53, 152, 219, 0.1) 100%);
     z-index: 0;
   }
   
   .gradient-bg::before {
     content: '';
     position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100%;
+    top: -20%;
+    right: -20%;
+    width: 100vw;
     height: 100%;
-    background: radial-gradient(circle, rgba(53, 152, 219, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+    background: radial-gradient(circle, rgba(53, 152, 219, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
     border-radius: 50%;
   }
   
   .gradient-bg::after {
     content: '';
     position: absolute;
-    bottom: -30%;
-    left: -30%;
-    width: 80%;
-    height: 80%;
-    background: radial-gradient(circle, rgba(52, 152, 219, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+    bottom: -20%;
+    left: -20%;
+    width: 100vw;
+    height: 100%;
+    background: radial-gradient(circle, rgba(52, 152, 219, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
     border-radius: 50%;
   }
   

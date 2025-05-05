@@ -164,10 +164,10 @@
 <style>
   .tests-container {
     background-color: var(--white);
-    min-height: 100vh;
-    padding: 0;
+    height: 100vh;
     width: 100%;
     position: relative;
+    overflow-y: auto;
     overflow-x: hidden;
   }
   
