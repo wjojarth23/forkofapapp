@@ -1,38 +1,16 @@
-# sv
+# AP EXAM PRACTICE APP
+Simple, clean UI for CrackAP Practice Problems
+Made to help me for my 2025 exams
+Avaiable at [teaches.me](teaches.me)
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+> I AM NOT RESPONSIBLE FOR THE SOURCING OF THE QUESTIONS. THEY ARE PULLED FROM CrackAP.com. THIS APP IS NOT ENDORSED BY THE COLLEGE BOARD
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Supported Exams:
+- AP Physics C
+- AP Calc BC
+- AP Bio
+- AP Chem
+- AP Euro
+- AP World
+- AP Computer Science (Some bugs)
+- More! Just ask or fork to add another!
